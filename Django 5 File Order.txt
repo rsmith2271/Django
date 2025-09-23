@@ -1,0 +1,105 @@
+In a Django 5 web app, the order in which you code your files typically follows the framework’s conventions and best practices. Here's a structured approach to help you build your app efficiently:
+
+1. Project Initialization
+Start by creating your Django project:
+
+django-admin startproject myproject
+
+This generates:
+
+manage.py
+myproject/ (settings, URLs, WSGI/ASGI)
+
+2. Create Your App(s)
+Each functional module should be its own app:
+
+Shell
+python manage.py startapp myapp
+
+This creates:
+
+myapp/models.py
+myapp/views.py
+myapp/urls.py (you’ll create this manually)
+myapp/templates/ (for HTML)
+myapp/static/ (for CSS/JS)
+
+3. Define Models
+Start with models.py:
+
+Define your database schema using Django ORM.
+Example:
+
+Python
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+4. Register Models in Admin
+In admin.py, register your models:
+
+Python
+from .models import Product
+admin.site.register(Product)
+
+5. Migrations
+Run migrations to apply your models to the database:
+
+Shell
+python manage.py makemigrations
+python manage.py migrate
+
+6. Set Up URLs
+In myapp/urls.py:
+
+Python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+]
+
+Include app URLs in myproject/urls.py:
+
+Python
+path('', include('myapp.urls')),
+
+7. Write Views
+In views.py, define logic:
+
+Python
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'home.html')
+
+8. Create Templates
+In myapp/templates/, create HTML files:
+
+Interactivity on code previews is coming soon
+
+9. Forms (if needed)
+In forms.py (create this file if needed):
+
+Python
+from django import forms
+from .models import Product
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price']
+
+10. Testing
+Use tests.py to write unit tests for your models, views, and forms.
+
+11. Static Files & Media
+Configure settings.py for static and media files:
+
+Python
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+12. Authentication (if needed)
+Use Django’s built-in auth system or extend it with custom user models.
